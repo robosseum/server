@@ -1,0 +1,9 @@
+= form_for @changeset, @action, fn f ->
+  = hidden_input f, :table_id
+  .field
+    = label f, :name, class: 'label'
+    .control
+      = text_input f, :name, class: 'input'
+    = error_tag f, :name
+  div
+    = submit "Save", class: 'button is-primary'

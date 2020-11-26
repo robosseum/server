@@ -19,16 +19,11 @@ defmodule RobosseumWeb.Dashboard.TableController do
       {:ok, table} ->
         conn
         |> put_flash(:info, "Table created successfully.")
-        |> redirect(to: Routes.table_path(conn, :show, table))
+        |> redirect(to: Routes.dashboard_table_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    table = Dashboard.get_table!(id)
-    render(conn, "show.html", table: table)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -44,7 +39,7 @@ defmodule RobosseumWeb.Dashboard.TableController do
       {:ok, table} ->
         conn
         |> put_flash(:info, "Table updated successfully.")
-        |> redirect(to: Routes.table_path(conn, :show, table))
+        |> redirect(to: Routes.dashboard_table_path(conn, :index, table))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", table: table, changeset: changeset)
@@ -57,6 +52,6 @@ defmodule RobosseumWeb.Dashboard.TableController do
 
     conn
     |> put_flash(:info, "Table deleted successfully.")
-    |> redirect(to: Routes.table_path(conn, :index))
+    |> redirect(to: Routes.dashboard_table_path(conn, :index))
   end
 end

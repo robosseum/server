@@ -1,0 +1,16 @@
+.title Listing Players
+.subtitle
+  = "for table #{@table.name}"
+
+table.table
+  thead
+    tr
+      th Name
+      th Id
+  tbody
+    = for player <- @players do
+      tr
+        td = link player.name, to: Routes.dashboard_table_player_path(@conn, :edit, @table, player)
+        td = player.id
+span
+  = link "New Player", to: Routes.dashboard_table_player_path(@conn, :new, @table)

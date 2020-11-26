@@ -5,7 +5,7 @@ defmodule Robosseum.Repo.Migrations.CreatePlayers do
     create table(:players, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :name, :string
-      add :points, :integer
+      add :points, :integer, default: 0
       add :connected, :boolean, default: false, null: false
       add :table_id, references(:tables, on_delete: :nothing, type: :binary_id)
 

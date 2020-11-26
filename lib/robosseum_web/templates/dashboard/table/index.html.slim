@@ -8,12 +8,11 @@ table.table
   tbody
     = for table <- @tables do
       tr
-        td = link table.name, to: Routes.table_path(@conn, :show, table)
+        td = link table.name, to: Routes.dashboard_table_path(@conn, :edit, table)
         td = table.id
         td
-          span
-            = link "Edit", to: Routes.table_path(@conn, :edit, table)
+          = link 'Players', to: Routes.dashboard_table_player_path(@conn, :index, table), class: 'button is-small'
           / span
-          /   = link "Delete", to: Routes.table_path(@conn, :delete, table), method: :delete, data: [confirm: "Are you sure?"]
+          /   = link "Delete", to: Routes.dashboard_table_path(@conn, :delete, table), method: :delete, data: [confirm: "Are you sure?"]
 span
-  = link "New Table", to: Routes.table_path(@conn, :new)
+  = link "New Table", to: Routes.dashboard_table_path(@conn, :new)

@@ -9,7 +9,7 @@ defmodule Robosseum.Models.Player do
   schema "players" do
     field :connected, :boolean, default: false
     field :name, :string
-    field :points, :integer
+    field :points, :integer, default: 0
     belongs_to :table, Table
 
     timestamps()
@@ -18,7 +18,7 @@ defmodule Robosseum.Models.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:name, :points, :connected])
-    |> validate_required([:name, :points, :connected])
+    |> cast(attrs, [:name, :points, :connected, :table_id])
+    |> validate_required([:name, :points, :connected, :table_id])
   end
 end

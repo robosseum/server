@@ -1,5 +1,4 @@
-h1
+.title
   | Edit Table
-= render "form.html", Map.put(assigns, :action, Routes.table_path(@conn, :update, @table))
-span
-  = link "Back", to: Routes.table_path(@conn, :index)
+
+= render "form.html", Map.put(assigns, :action, Routes.dashboard_table_path(@conn, :update, @table))

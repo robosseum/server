@@ -20,10 +20,12 @@ defmodule RobosseumWeb.Router do
     live "/", PageLive, :index
   end
 
-  scope "/dashboard", RobosseumWeb.Dashboard do
+  scope "/dashboard", RobosseumWeb.Dashboard, as: :dashboard do
     pipe_through :browser
 
-    resources "/tables", TableController
+    resources "/tables", TableController do
+      resources "/players", PlayerController
+    end
   end
 
   # Other scopes may use custom stacks.
