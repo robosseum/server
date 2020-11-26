@@ -1,0 +1,19 @@
+.title Listing Tables
+table.table
+  thead
+    tr
+      th Name
+      th Id
+      th
+  tbody
+    = for table <- @tables do
+      tr
+        td = link table.name, to: Routes.table_path(@conn, :show, table)
+        td = table.id
+        td
+          span
+            = link "Edit", to: Routes.table_path(@conn, :edit, table)
+          / span
+          /   = link "Delete", to: Routes.table_path(@conn, :delete, table), method: :delete, data: [confirm: "Are you sure?"]
+span
+  = link "New Table", to: Routes.table_path(@conn, :new)

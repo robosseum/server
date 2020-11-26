@@ -1,0 +1,5 @@
+h1
+  | Edit Table
+= render "form.html", Map.put(assigns, :action, Routes.table_path(@conn, :update, @table))
+span
+  = link "Back", to: Routes.table_path(@conn, :index)

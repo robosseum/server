@@ -1,0 +1,15 @@
+.navbar.is-primary
+  .navbar-menu
+    .navbar-end
+      .navbar-item
+        .buttons
+          .button.is-light
+            .fas.fa-user-circle
+            | Start
+          .button.is-danger
+            .fal.fa-coins
+            | Stop
+.section
+  .container
+    = alerts(@conn)
+    = @inner_content
