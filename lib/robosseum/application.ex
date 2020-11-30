@@ -14,7 +14,8 @@ defmodule Robosseum.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Robosseum.PubSub},
       # Start the Endpoint (http/https)
-      RobosseumWeb.Endpoint
+      RobosseumWeb.Endpoint,
+      Robosseum.Table,
       # Start a worker by calling: Robosseum.Worker.start_link(arg)
       # {Robosseum.Worker, arg}
     ]

@@ -10,6 +10,7 @@ defmodule Robosseum.Models.Table do
     field :deleted_at, :naive_datetime
     field :name, :string
     field :stop, :boolean, default: false
+    field :config, :map, default: Application.fetch_env!(:robosseum, :table_config)
     has_many :players, Player
     has_many :games, Game
 

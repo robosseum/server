@@ -39,7 +39,7 @@ defmodule RobosseumWeb.Dashboard.TableController do
       {:ok, table} ->
         conn
         |> put_flash(:info, "Table updated successfully.")
-        |> redirect(to: Routes.dashboard_table_path(conn, :index, table))
+        |> redirect(to: Routes.dashboard_table_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", table: table, changeset: changeset)

@@ -4,7 +4,9 @@ defmodule Robosseum.Dashboard do
 
   alias Robosseum.Models.{Table, Player}
 
-  def list_tables, do: Repo.all(Table)
+  def list_tables do
+    Repo.all(Table)
+  end
   def list_players(table_id) do
     Repo.all(from player in Player, where: player.table_id == ^table_id)
   end

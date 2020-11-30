@@ -2,6 +2,8 @@ defmodule Robosseum.Models.Round do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Robosseum.Models.{RoundPlayer}
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "rounds" do
@@ -10,6 +12,7 @@ defmodule Robosseum.Models.Round do
     field :pot, :integer
     field :stage, {:array, :string}
     field :game_id, :binary_id
+    has_many :round_players, RoundPlayer
 
     timestamps()
   end

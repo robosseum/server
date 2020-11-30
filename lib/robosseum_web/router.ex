@@ -17,7 +17,8 @@ defmodule RobosseumWeb.Router do
   scope "/", RobosseumWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    live "/tables", TableLive.Index, :index
+    live "/tables/:id", TableLive.Show, :show
   end
 
   scope "/dashboard", RobosseumWeb.Dashboard, as: :dashboard do

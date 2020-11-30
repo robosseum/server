@@ -1,0 +1,23 @@
+.title Tables
+
+= for table <- @tables do
+  .columns
+    .column
+      .card
+        .card-header
+          .card-header-title
+            = table.name
+          = link 'View', to: Routes.table_show_path(@socket, :show, table), class: 'card-header-icon'
+        .card-content
+          .subtitle Players
+          table.table.is-fullwidth
+            thead
+              th Name
+              th Points
+              th Connected
+            tbody
+              = for player <- table.players do
+                tr
+                  td = player.name
+                  td = player.points
+                  td = player.connected
