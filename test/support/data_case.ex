@@ -24,6 +24,7 @@ defmodule Robosseum.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Robosseum.DataCase
+      import Robosseum.Factory
     end
   end
 

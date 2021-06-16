@@ -3,14 +3,16 @@
     .is-size-3.has-text-centered
       span.has-text-weight-bold Table:
       span = @table.name
-      button phx-click="broadcast" Broadcast
+  .column
+    .buttons
+      button.button.is-primary phx-click="restart" phx-value-id=@table.id Restart
 
 .columns
   .column.players
     .title.is-4 Players
     div
       .columns.is-multiline.is-vcentered
-        = for player <- @table.players do
+        = for player <- @players do
           .column.is-4
             .card
               .card-header
@@ -50,9 +52,10 @@
           .fas.fa-angle-left
         span.title.is-5
           ' Games
-          = Enum.find_index(@games,fn g -> g == @game end) + 1
-          ' /
-          = Enum.count(@games)
+          = if Enum.count(@games) > 0 do
+            = Enum.find_index(@games,fn g -> g == @game end) + 1
+            ' /
+            = Enum.count(@games)
         a.icon(@click="nextGame")
           .fas.fa-angle-right
         a.icon(@click="lastGame")

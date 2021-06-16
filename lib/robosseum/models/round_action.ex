@@ -16,7 +16,7 @@ defmodule Robosseum.Models.RoundAction do
   @doc false
   def changeset(round_action, attrs) do
     round_action
-    |> cast(attrs, [:table_state, :action, :message])
-    |> validate_required([:table_state, :action, :message])
+    |> cast(attrs, [:table_state, :action, :message, :round_id])
+    |> validate_required([:table_state, :action, :message, :round_id])
   end
 end

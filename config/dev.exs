@@ -75,6 +75,4 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# Default Robosseum table config
-config :robosseum, table_config: %{chips: 10000, blind: 5, blind_increase: 10}
 

@@ -7,6 +7,12 @@ defmodule Robosseum.Repo.Migrations.CreatePlayers do
       add :name, :string
       add :points, :integer, default: 0
       add :connected, :boolean, default: false, null: false
+      add :chips, :integer, default: 0
+      add :bids, :integer, default: 0
+      add :min_bid, :integer
+      add :to_call, :integer
+      add :status, :string
+      add :hand, :map
       add :table_id, references(:tables, on_delete: :nothing, type: :binary_id)
 
       timestamps()

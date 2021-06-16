@@ -15,15 +15,19 @@ defmodule Robosseum.Application do
       {Phoenix.PubSub, name: Robosseum.PubSub},
       # Start the Endpoint (http/https)
       RobosseumWeb.Endpoint,
-      Robosseum.Table,
-      # Start a worker by calling: Robosseum.Worker.start_link(arg)
-      # {Robosseum.Worker, arg}
+      {Registry, keys: :unique, name: Registry.Tables},
+      Robosseum.Server.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Robosseum.Supervisor]
     Supervisor.start_link(children, opts)
+    # supervisor = Supervisor.start_link(children, opts)
+
+    # Task.start(fn -> Robosseum.Tables.restore_all() end)
+
+    # supervisor
   end
 
   # Tell Phoenix to update the endpoint configuration

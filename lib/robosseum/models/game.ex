@@ -2,7 +2,7 @@ defmodule Robosseum.Models.Game do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Robosseum.Models.{GamePlayer, Round}
+  alias Robosseum.Models.Round
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -11,7 +11,6 @@ defmodule Robosseum.Models.Game do
     field :dealer, :integer
     field :table_id, :binary_id
     has_many :rounds, Round
-    has_many :game_players, GamePlayer
 
     timestamps()
   end

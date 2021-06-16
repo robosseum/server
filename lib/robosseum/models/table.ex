@@ -9,8 +9,9 @@ defmodule Robosseum.Models.Table do
   schema "tables" do
     field :deleted_at, :naive_datetime
     field :name, :string
-    field :stop, :boolean, default: false
+    field :stop, :boolean, default: true
     field :config, :map, default: Application.fetch_env!(:robosseum, :table_config)
+    field :game, :any, virtual: true
     has_many :players, Player
     has_many :games, Game
 

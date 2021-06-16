@@ -10,6 +10,12 @@ defmodule Robosseum.Models.Player do
     field :connected, :boolean, default: false
     field :name, :string
     field :points, :integer, default: 0
+    field :chips, :integer, default: 0
+    field :bids, :integer, default: 0
+    field :min_bid, :integer, default: 0
+    field :to_call, :integer, default: 0
+    field :status, :string
+    field :hand, :map
     belongs_to :table, Table
 
     timestamps()
@@ -18,7 +24,7 @@ defmodule Robosseum.Models.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:name, :points, :connected, :table_id])
-    |> validate_required([:name, :points, :connected, :table_id])
+    |> cast(attrs, [:name, :points, :connected, :chips, :bids, :min_bid, :to_call, :status, :hand, :table_id])
+    |> validate_required([:name, :table_id])
   end
 end

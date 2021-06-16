@@ -32,6 +32,9 @@ config :phoenix, :template_engines,
   slime: PhoenixSlime.Engine,
   slimeex: PhoenixSlime.LiveViewEngine
 
+# Default Robosseum table config
+config :robosseum, table_config: %{chips: 10000, blind: 5, blind_increase: 10}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
