@@ -4,6 +4,7 @@ defmodule Robosseum.Server.Table do
 
   defstruct [
     :id,
+    :name,
     :game_id,
     :round_id,
     :players,
@@ -14,6 +15,7 @@ defmodule Robosseum.Server.Table do
     :deck,
     :stage,
     :active_player,
+    :winner,
     stop: true
   ]
 
@@ -92,6 +94,7 @@ defmodule Robosseum.Server.Table do
     }
   end
 
+  def new_action(table = %Table{round_id: nil}, _), do: table
   def new_action(table = %Table{}, %{action: action, message: message}) do
     Repo.create_round_action(table, action, message)
 
@@ -99,4 +102,14 @@ defmodule Robosseum.Server.Table do
   end
 
   def run_stage(table = %Table{stage: stage}), do: TexasHoldEm.run_stage(stage, table)
+
+  def bid(table, _player_id, amount) do
+    table = TexasHoldEm.Bids.bid(table, amount)
+    TexasHoldEm.next_stage(table)
+  end
+
+  def fold(table, _player_id) do
+    table = TexasHoldEm.Bids.fold(table)
+    TexasHoldEm.next_stage(table)
+  end
 end

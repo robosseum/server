@@ -1,130 +1,111 @@
 defmodule Robosseum.Server.TexasHoldEm.Stages do
   import Robosseum.Server.Utils
 
-  alias Robosseum.Server.{Round, Player, Hand, TexasHoldEm}
+  alias Robosseum.Server.{Table, Round, Player, TexasHoldEm, TexasHoldEm.Hand}
 
-  def deal(
-        table = %{
-          game: %{dealer: dealer, players: players},
-          round: %{deck: deck}
-        }
-      ) do
-    {deck, players} = deal_cards(players, deck, dealer, dealer)
+  @doc """
+  Deal cards to the players from the deck
+  """
+  def deal(table = %Table{dealer: dealer, players: players, deck: deck}) do
+    {deck, players} = deal_cards(players, deck, dealer)
 
-    %{
+    %Table{
       table
-      | game: %{
-          table.game
-          | players: players
-        },
-        round: %{
-          table.round
-          | stage: Round.next_stage(table, TexasHoldEm.stages()),
-            deck: deck
-        }
+      | players: players,
+        stage: Round.next_stage(table, TexasHoldEm.stages()),
+        deck: deck
     }
-    |> add_action(%{action: :deal, msg: "Deal cards"})
+    |> Table.new_action(%{action: "deal", message: "Deal cards"})
   end
 
-  def flop(
-        table = %{
-          round: %{deck: deck}
-        }
-      ) do
+  @doc """
+  Burn one card and put 3 cards on the board
+  """
+  def flop(table = %Table{deck: deck}) do
     [_burn, card1, card2, card3 | rest] = deck
 
-    %{
+    %Table{
       table
-      | round: %{
-          table.round
-          | stage: Round.next_stage(table, TexasHoldEm.stages()),
-            board: [card1, card2, card3],
-            deck: rest
-        }
+      | stage: Round.next_stage(table, TexasHoldEm.stages()),
+        board: [card1, card2, card3],
+        deck: rest
     }
-    |> add_action(%{action: :flop, msg: "Flop"})
+    |> Table.new_action(%{action: "flop", message: "Flop"})
   end
 
-  def turn(
-        table = %{
-          round: %{deck: deck, board: board}
-        }
-      ) do
+  @doc """
+  Burn one card and put a card on the board
+  """
+  def turn(table = %Table{deck: deck, board: board}) do
     [_burn, card | rest] = deck
 
-    %{
+    %Table{
       table
-      | round: %{
-          table.round
-          | stage: Round.next_stage(table, TexasHoldEm.stages()),
-            board: [card | board],
-            deck: rest
-        }
+      | stage: Round.next_stage(table, TexasHoldEm.stages()),
+        board: [card | board],
+        deck: rest
     }
-    |> add_action(%{action: :turn, msg: "Turn"})
+    |> Table.new_action(%{action: "turn", message: "Turn"})
   end
 
-  def river(
-        table = %{
-          round: %{deck: deck, board: board}
-        }
-      ) do
+  @doc """
+  Burn one card and put a card on the board
+  """
+  def river(table = %Table{deck: deck, board: board}) do
     [_burn, card | rest] = deck
 
-    %{
+    %Table{
       table
-      | round: %{
-          table.round
-          | stage: Round.next_stage(table, TexasHoldEm.stages()),
-            board: [card | board],
-            deck: rest
-        }
+      | stage: Round.next_stage(table, TexasHoldEm.stages()),
+        board: [card | board],
+        deck: rest
     }
-    |> add_action(%{action: :river, msg: "River"})
+    |> Table.new_action(%{action: "river", message: "River"})
   end
 
-  def ending(
-        table = %{
-          game: %{players: players},
-          round: %{board: board}
-        }
-      ) do
+  @doc """
+  Find winner and clear pot
+  """
+  def ending(table = %Table{players: players, board: board}) do
     winner = find_winner(players, board)
+    players = clear_pot(players, winner)
 
-    %{
+    %Table{
       table
-      | game: %{
-          table.game
-          | players: clear_pot(players, winner)
-        },
-        round: %{
-          table.round
-          | winner: Player.for_broadcast(winner),
-            stage: Round.next_stage(table, TexasHoldEm.stages())
-        }
+      | players: players,
+        winner: winner,
+        stage: Round.next_stage(table, TexasHoldEm.stages())
     }
-    |> add_action(%{
-      action: :winner,
+    |> Table.new_action(%{
+      action: "winner",
       # "Winner is #{winner.name} with #{
       #   Enum.join(Enum.map(elem(winner.rank, 1), &to_string/1), ", ")
       # }"
-      msg: "Winner is #{winner.name}"
+      message: "Winner is #{winner.name}"
       #   Enum.join(Enum.map(elem(winner.rank, 1), &to_string/1), ", ")
       # }"
     })
   end
 
+  @doc """
+  Deal two cards to each player [recursive], starting from the dealer
+  """
+  def deal_cards(players, deck, dealer), do: deal_cards(players, deck, dealer, dealer)
+
   def deal_cards(players, [card1, card2 | deck], dealer, index) do
     if mod(dealer - 1, length(players)) == index do
       {deck,
-       List.update_at(players, index, fn player -> Map.put(player, :hand, [card1, card2]) end)}
+       List.update_at(players, index, fn player -> %Player{player | hand: [card1, card2]} end)}
     else
       players
-      |> List.update_at(index, fn player -> Map.put(player, :hand, [card1, card2]) end)
+      |> List.update_at(index, fn player -> %Player{player | hand: [card1, card2]} end)
       |> deal_cards(deck, dealer, mod(index + 1, length(players)))
     end
   end
 
+  @doc """
+  Find winner among active players
+  """
   def find_winner(players, board) do
     active_players = Enum.filter(players, &Player.active?/1)
 
@@ -139,6 +120,13 @@ defmodule Robosseum.Server.TexasHoldEm.Stages do
     end
   end
 
+  @doc """
+  Distrube pot among players
+  * when "normal" game -> all pot goes to the winner
+  * when an all_in player is winner 
+    -> get only as much pot as he bid from other players
+    -> other players get the rest back
+  """
   def clear_pot(players, winner) do
     winner_bid = winner.bids
 
@@ -159,7 +147,7 @@ defmodule Robosseum.Server.TexasHoldEm.Stages do
             if player.chips == 0, do: "out", else: status
           end)
 
-        Map.put(player, :bids, 0)
+        %Player{player | bids: 0}
       end
     end)
   end

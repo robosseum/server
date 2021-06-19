@@ -20,9 +20,9 @@ defmodule Robosseum.Server.TableTest do
     assert match?(
              %Table{
                players: [
-                 %{name: "P1", chips: 10000, status: "active"},
-                 %{name: "P2", chips: 10000, status: "active"},
-                 %{name: "P3", chips: 10000, status: "active"}
+                 %{name: "P1", chips: 1000, status: "active"},
+                 %{name: "P2", chips: 1000, status: "active"},
+                 %{name: "P3", chips: 1000, status: "active"}
                ],
                dealer: 0,
                blind: 5
@@ -50,9 +50,9 @@ defmodule Robosseum.Server.TableTest do
     assert match?(
              %Table{
                players: [
-                 %{name: "P1", chips: 10000, status: "active"},
-                 %{name: "P2", chips: 10000, status: "active"},
-                 %{name: "P3", chips: 10000, status: "active"}
+                 %{name: "P1", chips: 1000, status: "active"},
+                 %{name: "P2", chips: 1000, status: "active"},
+                 %{name: "P3", chips: 1000, status: "active"}
                ],
                board: [],
                pot: 0,
@@ -80,9 +80,9 @@ defmodule Robosseum.Server.TableTest do
     assert match?(
              %Table{
                players: [
-                 %{name: "P1", chips: 10000, bids: 0, to_call: 10, status: "active"},
-                 %{name: "P2", chips: 9995, bids: 5, to_call: 5, status: "blind"},
-                 %{name: "P3", chips: 9990, bids: 10, to_call: 0, status: "blind"}
+                 %{name: "P1", chips: 1000, bids: 0, to_call: 10, status: "active"},
+                 %{name: "P2", chips: 995, bids: 5, to_call: 5, status: "blind"},
+                 %{name: "P3", chips: 990, bids: 10, to_call: 0, status: "blind"}
                ],
                pot: 15,
                active_player: 0,

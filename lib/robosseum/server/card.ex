@@ -15,7 +15,7 @@ defmodule Robosseum.Server.Card do
 
   def from_string(cards) when is_list(cards), do: Enum.map(cards, &from_string(&1))
 
-  def to_tuple(%{rank: rank, suit: suit}), do: {rank, suit}
+  def to_list(%{rank: rank, suit: suit}), do: [rank, suit]
 
   def ranks, do: Enum.to_list(@ranks)
   def suites, do: @suites

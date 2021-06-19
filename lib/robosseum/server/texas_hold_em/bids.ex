@@ -22,7 +22,7 @@ defmodule Robosseum.Server.TexasHoldEm.Bids do
     {small_blind, players} = player_bid(players, small_blind_index, blind, "blind")
     {big_blind, players} = player_bid(players, big_blind_index, blind * 2, "blind")
 
-    %{
+    %Table{
       table
       | players: players,
         pot: small_blind + big_blind,
@@ -35,28 +35,16 @@ defmodule Robosseum.Server.TexasHoldEm.Bids do
   @doc """
   A player bids
   """
-  def bid(
-        table = %{
-          game: %{players: players},
-          round: %{active_player: active_player_index, pot: pot}
-        },
-        bid
-      ) do
+  def bid(table = %Table{players: players, active_player: active_player_index, pot: pot}, bid) do
     active_player = Enum.at(players, active_player_index)
 
     {bid, players} = player_bid(players, active_player_index, bid)
 
-    %{
+    %Table{
       table
-      | game: %{
-          table.game
-          | players: players
-        },
-        round: %{
-          table.round
-          | active_player: next_active_player(players, active_player_index),
-            pot: pot + bid
-        }
+      | players: players,
+        active_player: next_active_player(players, active_player_index),
+        pot: pot + bid
     }
     |> Table.new_action(%{
       action: "bid",
@@ -69,20 +57,14 @@ defmodule Robosseum.Server.TexasHoldEm.Bids do
   @doc """
   A player folds a round
   """
-  def fold(table = %{game: %{players: players}, round: %{active_player: active_player_index}}) do
+  def fold(table = %Table{players: players, active_player: active_player_index}) do
     active_player = Enum.at(players, active_player_index)
     players = List.update_at(players, active_player_index, &%{&1 | status: "folded", to_call: 0})
 
-    %{
+    %Table{
       table
-      | game: %{
-          table.game
-          | players: players
-        },
-        round: %{
-          table.round
-          | active_player: next_active_player(players, active_player_index)
-        }
+      | players: players,
+        active_player: next_active_player(players, active_player_index)
     }
     |> Table.new_action(%{
       action: "fold",

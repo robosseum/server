@@ -20,3 +20,5 @@ config :robosseum, RobosseumWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :robosseum, table_config: %{chips: 1000, blind: 5, blind_increase: 10}
