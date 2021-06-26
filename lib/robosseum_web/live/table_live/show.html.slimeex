@@ -7,87 +7,95 @@
     .buttons
       button.button.is-primary phx-click="restart" phx-value-id=@table.id Restart
 
-.columns
-  .column.players
-    .title.is-4 Players
-    div
-      .columns.is-multiline.is-vcentered
-        = for player <- @players do
-          .column.is-4
-            .card
-              .card-header
-                .card-header-title.is-centered = player.name
-                - if player == @dealer do
-                  .card-header-icon
-                    span.icon.has-text-primary
-                      .fas.fa-usd-circle
-                - if player == @active_player do
-                  .card-header-icon
-                    span.icon.has-text-info
-                      .fas.fa-user-circle
-              .card-content
-                .columns
-                  | Hand
-                  / = for card <- player.hand do
-                  /   .column
-                  /     card.container class="pcard pcard-#{card}"
-              .card-footer
-                .card-footer-item.has-space-between
-                  span.icon
-                    .fal.fa-coins
-                  / div = player.chips
-                  div Chips
-                .card-footer-item.has-space-between
-                  span.icon
-                    .fal.fa-hand-holding-usd
-                  / div = player.to_call
-                  div Call
+= if @state do
+  .columns
+    .column.players
+      .title.is-4 Players
+      div
+        .columns.is-multiline.is-vcentered
+          = for player <- @state.players do
+            .column.is-4
+              .card
+                .card-header
+                  .card-header-title.is-centered = player.name
+                  = if player.index == @state.dealer do
+                    .card-header-icon
+                      span.icon.has-text-primary
+                        .fas.fa-usd-circle
+                  = if player.index == @state.active_player do
+                    .card-header-icon
+                      span.icon.has-text-info
+                        .fas.fa-user-circle
+                .card-content
+                  .columns
+                    = for card <- player.hand do
+                      .column
+                        .container class="pcard pcard-#{card_class(card)}"
+                .card-footer
+                  .card-footer-item.has-space-between
+                    span.icon
+                      .fal.fa-coins
+                    div = player.chips
+                  .card-footer-item.has-space-between
+                    span.icon
+                      .fal.fa-hand-holding-usd
+                    div = player.to_call
 
-  .column.info
-    .columns
-      .column
-        a.icon(@click="firstGame")
-          .fas.fa-angle-double-left
-        a.icon(@click="previousGame")
-          .fas.fa-angle-left
-        span.title.is-5
-          ' Games
-          = if Enum.count(@games) > 0 do
-            = Enum.find_index(@games,fn g -> g == @game end) + 1
-            ' /
-            = Enum.count(@games)
-        a.icon(@click="nextGame")
-          .fas.fa-angle-right
-        a.icon(@click="lastGame")
-          .fas.fa-angle-double-right
-      .column
-        a.icon(@click="firstRound")
-          .fas.fa-angle-double-left
-        a.icon(@click="previousRound")
-          .fas.fa-angle-left
-        span.title.is-5
-          | Round
-          | {{ rounds.length - selectedRound }}
-          | /
-          | {{ rounds.length }}
-        a.icon(@click="nextRound")
-          .fas.fa-angle-right
-        a.icon(@click="lastRound")
-          .fas.fa-angle-double-right
-    div(v-if="viewedAction !== undefined")
+    .column.info
       .columns
         .column
-          div Board
-          .columns
-            .column(v-for="card in viewedAction.state.board" :key="card")
-              card.container(:card="card")
+          a.icon(@click="firstGame")
+            .fas.fa-angle-double-left
+          a.icon(@click="previousGame")
+            .fas.fa-angle-left
+          span.title.is-5
+            ' Games
+            = @counters.game
+            ' /
+            = @counters.games
+          a.icon(@click="nextGame")
+            .fas.fa-angle-right
+          a.icon(@click="lastGame")
+            .fas.fa-angle-double-right
         .column
-          div Pot
-          / div {{ viewedAction.state.pot }}
-      nav.panel
-        .panel-heading Actions
-          | Actions
-        / .panel-block(v-for="(action, ai) in actions" :key="ai" @click="selectAction(ai)" :class="{'is-active':selectedAction == ai}")
-        /   .is-one-quarter
-        /     span.tag {{ action.action }}
-        /   | {{ action.msg }}
+          a.icon(@click="firstRound")
+            .fas.fa-angle-double-left
+          a.icon(@click="previousRound")
+            .fas.fa-angle-left
+          span.title.is-5
+            ' Round
+            = @counters.round
+            ' /
+            = @counters.rounds
+          a.icon(@click="nextRound")
+            .fas.fa-angle-right
+          a.icon(@click="lastRound")
+            .fas.fa-angle-double-right
+      div(v-if="viewedAction !== undefined")
+        .columns
+          .column
+            div Board
+            .columns
+              = for card <- @state.board do
+                .column
+                  .container class="pcard pcard-#{card_class(card)}"
+          .column
+            div Pot
+            div 
+              = @state.pot
+        nav.panel
+          .panel-heading Actions
+          = for action <- @actions do
+            .panel-block
+              .is-one-quarter.mr-1
+                span.tag= action.action
+              = action.message
+
+  .columns
+    .column
+      .title.is-3 Deck
+      .columns.deck
+        = for card <- @state.deck do
+          .column
+            .container class="pcard pcard-#{card_class(card)}"
+

@@ -13,7 +13,6 @@ defmodule RobosseumWeb.Dashboard.PlayerController do
   def new(conn, %{"table_id" => table_id}) do
     table = Dashboard.get_table!(table_id)
     changeset = Dashboard.change_player(%Player{}, %{table_id: table_id})
-    IO.inspect changeset
     render(conn, "new.html", table: table, changeset: changeset)
   end
 

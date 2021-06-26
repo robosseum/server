@@ -22,7 +22,7 @@ defmodule Robosseum.Server.Round do
     players =
       players
       |> Enum.filter(&(&1.status != "out"))
-      |> Enum.map(&%{&1 | status: "active", to_call: 0})
+      |> Enum.map(&%{&1 | status: "active", to_call: 0, hand: []})
 
     new_dealer = mod(dealer + 1, length(players))
     table = Table.new_round(table)
@@ -30,7 +30,8 @@ defmodule Robosseum.Server.Round do
     %Table{
       table
       | players: players,
-        dealer: new_dealer
+      dealer: new_dealer,
+      pot: 0
     }
   end
 

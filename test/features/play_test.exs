@@ -6,8 +6,9 @@ defmodule Features.PlayTest do
 
   test "before play", %{table: table} do
     assert length(table.players) == 3
-    assert table.game_id != nil
-    assert table.round_id != nil
+    assert table.counters.games == 1
+    assert table.counters.rounds == [1]
+    assert table.counters.actions == [[0]]
   end
 
   test "play", %{table: table} do
@@ -180,11 +181,13 @@ defmodule Features.PlayTest do
     assert match?(%{chips: 915, bids: 85, to_call: 0, status: "active"}, player3)
     assert match?(%{pot: 190, stage: ["end", "normal"], active_player: 2}, table)
 
+    # ending
     table = Table.run_stage(table)
     %Table{winner: winner, players: [_, _, player3]} = table
     assert winner.id == player3.id
     assert match?(%{chips: 1105}, player3)
 
+    # new round
     table = Table.run_stage(table)
     %Table{dealer: dealer, players: [player1, player2, player3]} = table
     assert match?(%{chips: 915, bids: 0, to_call: 0, status: "active"}, player1)

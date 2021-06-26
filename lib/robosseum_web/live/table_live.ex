@@ -2,7 +2,7 @@ defmodule RobosseumWeb.TableLive do
   import Ecto.Query, warn: false
   alias Robosseum.Repo
 
-  alias Robosseum.Models.{Table, Player, Game, Round}
+  alias Robosseum.Models.{Table, Player, Action}
 
   def list_tables do
     Table
@@ -11,15 +11,25 @@ defmodule RobosseumWeb.TableLive do
   end
 
   def get_table(id) do
-    players_query = from p in Player, order_by: p.position
-    games_query = from g in Game, order_by: g.inserted_at
-    rounds_query = from r in Round, order_by: r.inserted_at
+    # players_query = from p in Player, order_by: p.index
+    # actions_query = from a in Action, order_by: a.index
 
     Table
     |> Repo.get!(id)
-    |> Repo.preload(players: players_query)
-    |> Repo.preload(
-      games: {games_query, [:game_players, rounds: {rounds_query, [:round_players]}]}
+    # |> Repo.preload(players: players_query)
+    # |> Repo.preload(actions: actions_query)
+  end
+
+  def get_action(table_id) do
+    Repo.one(from a in Action, order_by: [desc: a.index], where: a.table_id == ^table_id, limit: 1)
+  end
+
+  def get_actions(table_id, game, round) do
+    Repo.all(
+      from a in Action,
+        order_by: [desc: a.index],
+        where:
+          a.table_id == ^table_id and a.game == ^game and a.round == ^round
     )
   end
 

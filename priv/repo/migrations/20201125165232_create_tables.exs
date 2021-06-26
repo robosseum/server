@@ -6,7 +6,8 @@ defmodule Robosseum.Repo.Migrations.CreateTables do
       add :id, :binary_id, primary_key: true
       add :name, :string
       add :stop, :boolean, default: true, null: false
-      add :deleted_at, :naive_datetime
+      add :config, :map
+      add :counters, :map
 
       timestamps()
     end

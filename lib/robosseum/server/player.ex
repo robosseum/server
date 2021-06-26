@@ -4,7 +4,17 @@ defmodule Robosseum.Server.Player do
   `status` ("active" | "folded" | "raised" | "called" | "all_in" | "blind" | "out") - current status of a player in a round
   `rank` -> used for storing the end round rank of cards for finding the winner
   """
-  defstruct [:id, :name, hand: [], status: "active", chips: 0, to_call: 0, bids: 0, rank: nil]
+  defstruct [
+    :id,
+    :name,
+    :index,
+    hand: [],
+    status: "active",
+    chips: 0,
+    to_call: 0,
+    bids: 0,
+    rank: nil
+  ]
 
   def new(nil), do: nil
 
@@ -12,11 +22,7 @@ defmodule Robosseum.Server.Player do
     %__MODULE__{
       id: player.id,
       name: player.name,
-      chips: player.chips,
-      status: player.status,
-      to_call: player.to_call,
-      bids: player.bids,
-      hand: player.hand
+      index: player.index
     }
   end
 

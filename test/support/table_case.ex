@@ -6,14 +6,16 @@ defmodule Robosseum.TableCase do
   alias Robosseum.Server.{Card, Table}
 
   setup do
-    table = insert!(:table, name: "Table1") |> Table.new()
+    table = insert!(:table, name: "Table1", counters: %{})
     insert!(:player, table_id: table.id, name: "P1")
     insert!(:player, table_id: table.id, name: "P2")
     insert!(:player, table_id: table.id, name: "P3")
-    table = Table.new_game(table)
-    table = Table.new_round(table)
-    table = %Table{table | deck: deck()}
-    {:ok, table: table}
+    table = 
+      table.id
+      |> Table.get_table()
+      |> Table.new_game()
+      |> Table.new_round()
+    {:ok, table: %Table{table | deck: deck()}}
   end
 
   def deck do

@@ -8,7 +8,7 @@ defmodule Robosseum.Server.Impl do
   alias Robosseum.Server.Table
 
   def init(table_id) do
-    table = Table.get_table(table_id)
+    table = Table.restore_state(table_id)
     {:ok, table}
   end
 
@@ -18,6 +18,8 @@ defmodule Robosseum.Server.Impl do
   def handle_call({:start}, _, table) do
     Kernel.send(self(), :new_game)
 
+    table = %Table{table | stop: false}
+
     {:reply, table, table}
   end
 
@@ -26,17 +28,19 @@ defmodule Robosseum.Server.Impl do
 
     Kernel.send(self(), :new_game)
 
+    table = %Table{table | stop: false}
+
     {:reply, table, table}
   end
 
-  # def handle_call({:stop}, _, table) do
-  #   table = %{
-  #     table
-  #     | stop: true
-  #   }
+  def handle_call({:stop}, _, table) do
+    table = %Table{
+      table
+      | stop: true
+    }
 
-  #   {:reply, table, table}
-  # end
+    {:reply, table, table}
+  end
 
   # def handle_call({:sit, player}, _, table) do
   #   table = Core.sit(table, player)
@@ -50,21 +54,21 @@ defmodule Robosseum.Server.Impl do
   #   {:reply, table, table}
   # end
 
-  # def handle_call({:bid, player_id, amount}, _, table) do
-  #   # check if active player is bidding player
-  #   table = Core.bid(table, player_id, amount)
-  #   broadcast_update(table)
-  #   Kernel.send(self(), :run_stage)
-  #   {:reply, table, table}
-  # end
+  def handle_call({:bid, player_id, amount}, _, table) do
+    # TODO: check if active player is bidding player
+    table = Table.bid(table, player_id, amount)
+    # broadcast_update(table)
+    Kernel.send(self(), :run_stage)
+    {:reply, table, table}
+  end
 
-  # def handle_call({:fold, player_id}, _, table) do
-  #   # check if active player is bidding player
-  #   table = Core.fold(table, player_id)
-  #   broadcast_update(table)
-  #   Kernel.send(self(), :run_stage)
-  #   {:reply, table, table}
-  # end
+  def handle_call({:fold, player_id}, _, table) do
+    # TODO: check if active player is bidding player
+    table = Table.fold(table, player_id)
+    # broadcast_update(table)
+    Kernel.send(self(), :run_stage)
+    {:reply, table, table}
+  end
 
   def handle_info(:new_game, table) do
     table = Table.new_game(table)
@@ -93,6 +97,7 @@ defmodule Robosseum.Server.Impl do
       case stage do
         [_, "bid"] ->
           # push_player_bid(table)
+          table = fake_push_player_bid(table)
           table
 
         _ ->
@@ -125,4 +130,18 @@ defmodule Robosseum.Server.Impl do
   #     player: player_to_bid
   #   })
   # end
+
+  defp fake_push_player_bid(table = %Table{players: players, active_player: active_player}) do
+    player = Enum.at(players, active_player)
+
+    bid = Enum.random(player.to_call..100)
+
+    case Enum.random(0..100) do
+      x when x in 0..10 ->
+        Table.fold(table, player.id)
+
+      x when x in 11..100 ->
+        Table.bid(table, player.id, bid)
+    end
+  end
 end

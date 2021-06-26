@@ -5,11 +5,13 @@
 table.table
   thead
     tr
+      th Index
       th Name
       th Id
   tbody
     = for player <- @players do
       tr
+        td = player.index
         td = link player.name, to: Routes.dashboard_table_player_path(@conn, :edit, @table, player)
         td = player.id
 span

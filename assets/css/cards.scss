@@ -1,0 +1,166 @@
+.deck {
+  overflow-x: scroll;
+  width: 1344px;
+}
+.pcard {
+  width: 44px;
+  height: 64px;
+  background-image: url('/images/cards.png');
+  background-repeat: no-repeat;
+  &.pcard-Ad {
+    background-position: 0 0;
+  }
+  &.pcard-2d {
+    background-position: -51px 0;
+  }
+  &.pcard-3d {
+    background-position: -103px 0;
+  }
+  &.pcard-4d {
+    background-position: -155px 0;
+  }
+  &.pcard-5d {
+    background-position: -207px 0;
+  }
+  &.pcard-6d {
+    background-position: -259px 0;
+  }
+  &.pcard-7d {
+    background-position: -311px 0;
+  }
+  &.pcard-8d {
+    background-position: -362px 0;
+  }
+  &.pcard-9d {
+    background-position: -414px 0;
+  }
+  &.pcard-Td {
+    background-position: -466px 0;
+  }
+  &.pcard-Jd {
+    background-position: -518px 0;
+  }
+  &.pcard-Qd {
+    background-position: -570px 0;
+  }
+  &.pcard-Kd {
+    background-position: -622px 0;
+  }
+  &.pcard-Ah {
+    background-position: 0 -72px;
+  }
+  &.pcard-2h {
+    background-position: -51px -72px;
+  }
+  &.pcard-3h {
+    background-position: -103px -72px;
+  }
+  &.pcard-4h {
+    background-position: -155px -72px;
+  }
+  &.pcard-5h {
+    background-position: -207px -72px;
+  }
+  &.pcard-6h {
+    background-position: -259px -72px;
+  }
+  &.pcard-7h {
+    background-position: -311px -72px;
+  }
+  &.pcard-8h {
+    background-position: -362px -72px;
+  }
+  &.pcard-9h {
+    background-position: -414px -72px;
+  }
+  &.pcard-Th {
+    background-position: -466px -72px;
+  }
+  &.pcard-Jh {
+    background-position: -518px -72px;
+  }
+  &.pcard-Qh {
+    background-position: -570px -72px;
+  }
+  &.pcard-Kh {
+    background-position: -622px -72px;
+  }
+  &.pcard-As {
+    background-position: 0 -145px;
+  }
+  &.pcard-2s {
+    background-position: -51px -145px;
+  }
+  &.pcard-3s {
+    background-position: -103px -145px;
+  }
+  &.pcard-4s {
+    background-position: -155px -145px;
+  }
+  &.pcard-5s {
+    background-position: -207px -145px;
+  }
+  &.pcard-6s {
+    background-position: -259px -145px;
+  }
+  &.pcard-7s {
+    background-position: -311px -145px;
+  }
+  &.pcard-8s {
+    background-position: -362px -145px;
+  }
+  &.pcard-9s {
+    background-position: -414px -145px;
+  }
+  &.pcard-Ts {
+    background-position: -466px -145px;
+  }
+  &.pcard-Js {
+    background-position: -518px -145px;
+  }
+  &.pcard-Qs {
+    background-position: -570px -145px;
+  }
+  &.pcard-Ks {
+    background-position: -622px -145px;
+  }
+  &.pcard-Ac {
+    background-position: 0 -217px;
+  }
+  &.pcard-2c {
+    background-position: -51px -217px;
+  }
+  &.pcard-3c {
+    background-position: -103px -217px;
+  }
+  &.pcard-4c {
+    background-position: -155px -217px;
+  }
+  &.pcard-5c {
+    background-position: -207px -217px;
+  }
+  &.pcard-6c {
+    background-position: -259px -217px;
+  }
+  &.pcard-7c {
+    background-position: -311px -217px;
+  }
+  &.pcard-8c {
+    background-position: -362px -217px;
+  }
+  &.pcard-9c {
+    background-position: -414px -217px;
+  }
+  &.pcard-Tc {
+    background-position: -466px -217px;
+  }
+  &.pcard-Jc {
+    background-position: -518px -217px;
+  }
+  &.pcard-Qc {
+    background-position: -570px -217px;
+  }
+  &.pcard-Kc {
+    background-position: -622px -217px;
+  }
+}

@@ -2,18 +2,22 @@ defmodule Robosseum.Models.Table do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Robosseum.Models.{Player, Game}
+  alias Robosseum.Models.{Player, Action}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tables" do
-    field :deleted_at, :naive_datetime
     field :name, :string
     field :stop, :boolean, default: true
     field :config, :map, default: Application.fetch_env!(:robosseum, :table_config)
-    field :game, :any, virtual: true
     has_many :players, Player
-    has_many :games, Game
+    has_many :actions, Action
+
+    embeds_one :counters, Counters, on_replace: :delete  do
+      field :games, :integer, default: 0
+      field :rounds, {:array, :integer}, default: []
+      field :actions, {:array, {:array, :integer}}, default: []
+    end
 
     timestamps()
   end
@@ -21,7 +25,17 @@ defmodule Robosseum.Models.Table do
   @doc false
   def changeset(table, attrs) do
     table
-    |> cast(attrs, [:name, :stop, :deleted_at])
+    |> cast(attrs, [:name, :stop])
+    |> cast_embed(:counters, with: &counters_changeset/2)
     |> validate_required([:name])
+  end
+
+  defp counters_changeset(counters, params) do
+    counters
+    |> cast(params, [
+      :games,
+      :rounds,
+      :actions
+    ])
   end
 end

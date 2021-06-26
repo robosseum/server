@@ -4,18 +4,18 @@ defmodule Robosseum.Server.TableTest do
   alias Robosseum.Server.{Table}
 
   test ".new_game" do
-    table = insert!(:table)
+    table = insert!(:table, counters: %{})
 
     insert!(:player, table_id: table.id, name: "P1")
     insert!(:player, table_id: table.id, name: "P2")
     insert!(:player, table_id: table.id, name: "P3")
 
     new_state =
-      table
-      |> Table.new()
+      table.id
+      |> Table.get_table()
       |> Table.new_game()
 
-    assert new_state.game_id != nil
+    assert new_state.counters.games == 1
 
     assert match?(
              %Table{
@@ -32,19 +32,19 @@ defmodule Robosseum.Server.TableTest do
   end
 
   test ".new_round" do
-    table = insert!(:table)
+    table = insert!(:table, counters: %{})
 
     insert!(:player, table_id: table.id, name: "P1")
     insert!(:player, table_id: table.id, name: "P2")
     insert!(:player, table_id: table.id, name: "P3")
 
     new_state =
-      table
-      |> Table.new()
+      table.id
+      |> Table.get_table()
       |> Table.new_game()
       |> Table.new_round()
 
-    assert new_state.round_id != nil
+    assert new_state.counters.rounds == [1]
     assert new_state.deck != []
 
     assert match?(
@@ -64,15 +64,15 @@ defmodule Robosseum.Server.TableTest do
   end
 
   test ".run_stage" do
-    table = insert!(:table)
+    table = insert!(:table, counters: %{})
 
     insert!(:player, table_id: table.id, name: "P1")
     insert!(:player, table_id: table.id, name: "P2")
     insert!(:player, table_id: table.id, name: "P3")
 
     new_state =
-      table
-      |> Table.new()
+      table.id
+      |> Table.get_table()
       |> Table.new_game()
       |> Table.new_round()
       |> Table.run_stage()
@@ -92,9 +92,7 @@ defmodule Robosseum.Server.TableTest do
            )
 
     round_action =
-      Robosseum.Repo.one!(
-        from r in Robosseum.Models.RoundAction, order_by: [desc: r.inserted_at], limit: 1
-      )
+      Robosseum.Repo.one!(from a in Robosseum.Models.Action, order_by: a.index, limit: 1)
 
     assert match?(%{action: "blinds", message: "Put blinds"}, round_action)
   end
